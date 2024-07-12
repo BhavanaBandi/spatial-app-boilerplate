@@ -1,17 +1,20 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import { ChromePicker } from 'react-color';
 import Draggable from 'react-draggable';
 
-const LightControls = ({ lights, updateLight, setExpandedLight, addLight, deleteLight, resetLights, toggleGlobalShadows, globalShadows, globalExposure, updateGlobalExposure, setLights }) => {
-  const [expanded, setExpanded] = useState(null);
-
-  const toggleExpand = (id) => {
-    const newExpanded = expanded === id ? null : id;
-    setExpanded(newExpanded);
-    setExpandedLight(newExpanded);
-  };
-
+const LightControls = ({
+  lights,
+  updateLight,
+  setExpandedLightId,
+  expandedLightId,
+  addLight,
+  deleteLight,
+  resetLights,
+  toggleGlobalShadows,
+  globalShadows,
+  globalExposure,
+  updateGlobalExposure,
+}) => {
   const handlePositionChange = (id, axis, value) => {
     const newValue = parseFloat(value);
     const light = lights.find(light => light.id === id);
@@ -20,26 +23,8 @@ const LightControls = ({ lights, updateLight, setExpandedLight, addLight, delete
     updateLight(id, 'position', newPosition);
   };
 
-  const exportLights = () => {
-    const dataStr = JSON.stringify(lights, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-
-    const exportFileDefaultName = 'lights.json';
-
-    let linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-  };
-
-  const importLights = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const importedLights = JSON.parse(e.target.result);
-      setLights(importedLights);
-    };
-    reader.readAsText(file);
+  const toggleExpand = (id) => {
+    setExpandedLightId(expandedLightId === id ? null : id);
   };
 
   return (
@@ -65,8 +50,6 @@ const LightControls = ({ lights, updateLight, setExpandedLight, addLight, delete
               aria-label="Global Exposure"
             />
           </label>
-          <button onClick={exportLights}>Export Lights</button>
-          <input type="file" accept=".json" onChange={importLights} />
         </div>
         {lights.map((light) => (
           <div key={light.id} className="light-control">
@@ -74,7 +57,7 @@ const LightControls = ({ lights, updateLight, setExpandedLight, addLight, delete
               <h3>{light.type.charAt(0).toUpperCase() + light.type.slice(1)} Light</h3>
               <button className="delete-button" onClick={() => deleteLight(light.id)}>Delete</button>
             </div>
-            {expanded === light.id && (
+            {expandedLightId === light.id && (
               <div className="controls">
                 <ChromePicker
                   color={light.color}

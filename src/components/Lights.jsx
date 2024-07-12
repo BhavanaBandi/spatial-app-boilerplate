@@ -1,28 +1,17 @@
-import React, { useRef, useEffect } from 'react';
+// components/Lights.jsx
+
+import React from 'react';
 import { DirectionalLightHelper, PointLightHelper, SpotLightHelper } from 'three';
 
 const Lights = ({ lights, expandedLightId, globalExposure }) => {
-  const lightRefs = useRef({});
-
-  useEffect(() => {
-    lights.forEach((light) => {
-      if (!lightRefs.current[light.id]) {
-        lightRefs.current[light.id] = React.createRef();
-      }
-    });
-  }, [lights]);
-
   return (
     <>
       {lights.map((light) => {
-        const ref = lightRefs.current[light.id];
-
         switch (light.type) {
           case 'directional':
             return (
               <directionalLight
                 key={light.id}
-                ref={ref}
                 color={light.color}
                 intensity={light.intensity * globalExposure}
                 position={light.position}
@@ -33,8 +22,8 @@ const Lights = ({ lights, expandedLightId, globalExposure }) => {
                 shadow-camera-far={500}
                 shadow-normalBias={1 - light.shadowIntensity}
               >
-                {expandedLightId === light.id && ref.current && (
-                  <primitive object={new DirectionalLightHelper(ref.current, 5)} />
+                {expandedLightId === light.id && (
+                  <primitive object={new DirectionalLightHelper()} />
                 )}
               </directionalLight>
             );
@@ -42,7 +31,6 @@ const Lights = ({ lights, expandedLightId, globalExposure }) => {
             return (
               <pointLight
                 key={light.id}
-                ref={ref}
                 color={light.color}
                 intensity={light.intensity * globalExposure}
                 position={light.position}
@@ -54,8 +42,8 @@ const Lights = ({ lights, expandedLightId, globalExposure }) => {
                 shadow-camera-far={500}
                 shadow-normalBias={1 - light.shadowIntensity}
               >
-                {expandedLightId === light.id && ref.current && (
-                  <primitive object={new PointLightHelper(ref.current, 5)} />
+                {expandedLightId === light.id && (
+                  <primitive object={new PointLightHelper()} />
                 )}
               </pointLight>
             );
@@ -63,7 +51,6 @@ const Lights = ({ lights, expandedLightId, globalExposure }) => {
             return (
               <spotLight
                 key={light.id}
-                ref={ref}
                 color={light.color}
                 intensity={light.intensity * globalExposure}
                 position={light.position}
@@ -77,8 +64,8 @@ const Lights = ({ lights, expandedLightId, globalExposure }) => {
                 shadow-camera-far={500}
                 shadow-normalBias={1 - light.shadowIntensity}
               >
-                {expandedLightId === light.id && ref.current && (
-                  <primitive object={new SpotLightHelper(ref.current)} />
+                {expandedLightId === light.id && (
+                  <primitive object={new SpotLightHelper()} />
                 )}
               </spotLight>
             );
