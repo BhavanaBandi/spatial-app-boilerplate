@@ -1,7 +1,7 @@
-// components/Lights.jsx
-
+// Lights.jsx
 import React from 'react';
-import { DirectionalLightHelper, PointLightHelper, SpotLightHelper } from 'three';
+import { DirectionalLight, PointLight, SpotLight, DirectionalLightHelper, PointLightHelper, SpotLightHelper } from 'three';
+import { useFrame } from '@react-three/fiber';
 
 const Lights = ({ lights, expandedLightId, globalExposure }) => {
   return (

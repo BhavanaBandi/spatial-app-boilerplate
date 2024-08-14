@@ -1,3 +1,4 @@
+//Effect.jsx
 import { useLoader } from '@react-three/fiber'
 import { EffectComposer, Bloom, LUT } from '@react-three/postprocessing'
 import { useControls } from 'leva'
@@ -9,12 +10,18 @@ export function Effects() {
     enabled: true,
     bloomIntensity: { value: 1.75, min: 0, max: 5 }
   })
-  return (
-    enabled && (
-      <EffectComposer>
-        <Bloom luminanceThreshold={0.2} mipmapBlur luminanceSmoothing={0} intensity={bloomIntensity} />
-        <LUT lut={texture} />
-      </EffectComposer>
+  
+  try {
+    return (
+      enabled && (
+        <EffectComposer>
+          <Bloom luminanceThreshold={0.2} mipmapBlur luminanceSmoothing={0} intensity={bloomIntensity} />
+          <LUT lut={texture} />
+        </EffectComposer>
+      )
     )
-  )
+  } catch (error) {
+    console.error('Error in Effects component:', error)
+    return null
+  }
 }

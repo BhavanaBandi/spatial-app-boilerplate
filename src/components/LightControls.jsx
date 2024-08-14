@@ -1,8 +1,8 @@
 import React from 'react';
 import { ChromePicker } from 'react-color';
-import Draggable from 'react-draggable';
-
+import './lights.css'
 const LightControls = ({
+  onClose,
   lights,
   updateLight,
   setExpandedLightId,
@@ -28,8 +28,10 @@ const LightControls = ({
   };
 
   return (
-    <Draggable handle=".drag-handle">
       <div className="light-controls-container">
+        <div className="header">
+          <h2>Lights Panel</h2>
+        </div>
         <div className="controls-header">
           <button onClick={() => addLight('directional')}>Add Directional Light</button>
           <button onClick={() => addLight('point')}>Add Point Light</button>
@@ -38,8 +40,11 @@ const LightControls = ({
           <button onClick={toggleGlobalShadows}>
             {globalShadows ? 'Disable Shadows' : 'Enable Shadows'}
           </button>
-          <label>
+        </div>
+        <div className="control-group">
+        <label>
             Global Exposure
+          <div className='slider-container'>
             <input
               type="range"
               min="0"
@@ -48,14 +53,17 @@ const LightControls = ({
               value={globalExposure}
               onChange={(e) => updateGlobalExposure(parseFloat(e.target.value))}
               aria-label="Global Exposure"
+              className='Exposure-slider'
             />
-          </label>
+            <output className="slider-output">{`${(globalExposure*10).toFixed(0)}%`}</output>
+          </div>
+        </label>
         </div>
         {lights.map((light) => (
           <div key={light.id} className="light-control">
             <div className="drag-handle" onClick={() => toggleExpand(light.id)}>
               <h3>{light.type.charAt(0).toUpperCase() + light.type.slice(1)} Light</h3>
-              <button className="delete-button" onClick={() => deleteLight(light.id)}>Delete</button>
+              <button className="delete-button" onClick={() => deleteLight(light.id)}>X</button>
             </div>
             {expandedLightId === light.id && (
               <div className="controls">
@@ -65,6 +73,7 @@ const LightControls = ({
                 />
                 <label>
                   Intensity
+                  <div className='slider-container'>
                   <input
                     type="range"
                     min="0"
@@ -74,6 +83,8 @@ const LightControls = ({
                     onChange={(e) => updateLight(light.id, 'intensity', parseFloat(e.target.value))}
                     aria-label="Intensity"
                   />
+                  <output className="slider-output">{`${(light.intensity*10).toFixed(0)}%`}</output>
+                  </div>
                 </label>
                 <label>
                   Position X
@@ -104,6 +115,7 @@ const LightControls = ({
                 </label>
                 <label>
                   Shadow Intensity
+                  <div className='slider-container'>
                   <input
                     type="range"
                     min="0"
@@ -113,11 +125,14 @@ const LightControls = ({
                     onChange={(e) => updateLight(light.id, 'shadowIntensity', parseFloat(e.target.value))}
                     aria-label="Shadow Intensity"
                   />
+                  <output className="slider-output">{`${(light.shadowIntensity*50).toFixed(0)}%`}</output>
+                  </div>
                 </label>
                 {light.type === 'spot' && (
                   <>
                     <label>
                       Angle
+                      <div className='slider-container'>
                       <input
                         type="range"
                         min="0"
@@ -127,9 +142,12 @@ const LightControls = ({
                         onChange={(e) => updateLight(light.id, 'angle', parseFloat(e.target.value))}
                         aria-label="Angle"
                       />
+                      <output className="slider-output">{`${(light.angle*(1000/31)).toFixed(0)}%`}</output>
+                      </div>
                     </label>
                     <label>
                       Penumbra
+                      <div className='slider-container'>
                       <input
                         type="range"
                         min="0"
@@ -139,9 +157,12 @@ const LightControls = ({
                         onChange={(e) => updateLight(light.id, 'penumbra', parseFloat(e.target.value))}
                         aria-label="Penumbra"
                       />
+                      <output className="slider-output">{`${(light.penumbra*100).toFixed(0)}%`}</output>
+                      </div>
                     </label>
                     <label>
                       Distance
+                      <div className='slider-container'>
                       <input
                         type="range"
                         min="0"
@@ -151,12 +172,15 @@ const LightControls = ({
                         onChange={(e) => updateLight(light.id, 'distance', parseFloat(e.target.value))}
                         aria-label="Distance"
                       />
+                      <output className="slider-output">{`${(light.distance).toFixed(0)}%`}</output>
+                      </div>
                     </label>
                   </>
                 )}
                 {light.type === 'point' && (
                   <label>
                     Distance
+                    <div className='slider-container'>
                     <input
                       type="range"
                       min="0"
@@ -166,6 +190,8 @@ const LightControls = ({
                       onChange={(e) => updateLight(light.id, 'distance', parseFloat(e.target.value))}
                       aria-label="Distance"
                     />
+                    <output className="slider-output">{`${(light.distance).toFixed(0)}%`}</output>
+                    </div>
                   </label>
                 )}
               </div>
@@ -173,7 +199,6 @@ const LightControls = ({
           </div>
         ))}
       </div>
-    </Draggable>
   );
 };
 
